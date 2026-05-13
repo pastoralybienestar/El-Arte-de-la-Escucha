@@ -10,13 +10,6 @@
     
     <!-- Lucide Icons (CDN) -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    
-    <!-- Estilos personalizados para las transiciones -->
-    <style>
-        .linea-oracion {
-            transition: all 1.2s ease-in-out;
-        }
-    </style>
 </head>
 <body class="min-h-screen bg-slate-50 font-sans text-slate-800 selection:bg-blue-200">
 
@@ -73,40 +66,21 @@
                     <i data-lucide="message-circle" class="w-64 h-64"></i>
                 </div>
                 
-                <!-- Pantalla Inicial de la Oración -->
-                <div id="oracion-inicio" class="text-center py-16 relative z-10">
-                    <button 
-                        onclick="comenzarOracion()"
-                        class="bg-blue-600 hover:bg-blue-500 text-white px-10 py-5 rounded-full font-semibold text-xl transition-all hover:scale-105 shadow-[0_0_40px_rgba(37,99,235,0.4)]"
-                    >
-                        Iniciar Lectura Reflexiva
-                    </button>
-                </div>
-
-                <!-- Textos de la Oración -->
-                <div id="oracion-textos" class="hidden flex-col items-center justify-center space-y-6 font-serif text-2xl md:text-3xl leading-relaxed relative z-10 min-h-[450px] text-center">
-                    <p class="linea-oracion opacity-0 translate-y-8 hidden text-slate-100">Señor, enséñame el arte de escuchar.</p>
-                    <p class="linea-oracion opacity-0 translate-y-8 hidden text-slate-100">Armoniza toda mi persona para prestar atención.</p>
-                    <p class="linea-oracion opacity-0 translate-y-8 hidden text-slate-100">Empápame de silencio para acoger los gritos de cada persona.</p>
-                    <p class="linea-oracion opacity-0 translate-y-8 hidden text-slate-100">Regálame sosiego interior para contener su agitación y sus padecimientos.</p>
-                    <p class="linea-oracion opacity-0 translate-y-8 hidden text-slate-100">Dame el cuidado, la paciencia y el respeto necesarios para que los que vengan a mí, se sientan escuchados.</p>
-                    <p class="linea-oracion opacity-0 translate-y-8 hidden text-slate-100">Haz que aprenda a escuchar con todo mi ser:</p>
-                    <p class="linea-oracion opacity-0 translate-y-8 hidden text-slate-100">que escuche con todo mi cuerpo, con los ojos, con mi sonrisa, con las manos, con el alma…</p>
-                    <p class="linea-oracion opacity-0 translate-y-8 hidden text-slate-100">Que no enjuicie, aconseje, interprete, dirija a las personas,</p>
-                    <p class="linea-oracion opacity-0 translate-y-8 hidden text-slate-100">Sino que, simplemente, las escuche.</p>
-                    <p class="linea-oracion opacity-0 translate-y-8 hidden text-slate-100">Que mis reflejos y palabras no sean más que el fruto de otra escucha:</p>
-                    <p class="linea-oracion opacity-0 translate-y-8 hidden text-slate-100">la de tu voz que me habla en mi interior,</p>
-                    <p class="linea-oracion opacity-0 translate-y-8 hidden text-slate-100">la de tu amor, del que solamente soy un signo y un portador para quien escucho.</p>
-                    <p class="linea-oracion opacity-0 translate-y-8 hidden font-bold text-blue-300 mt-8">Amén.</p>
-
-                    <div id="btn-reiniciar-oracion" class="hidden mt-12 w-full">
-                        <button 
-                            onclick="reiniciarOracion()"
-                            class="text-sm text-slate-400 hover:text-white transition-colors border border-slate-600 px-6 py-2 rounded-full uppercase tracking-widest"
-                        >
-                            Reiniciar Oración
-                        </button>
-                    </div>
+                <!-- Textos de la Oración (Visible completamente desde el inicio) -->
+                <div class="flex flex-col items-center justify-center space-y-6 font-serif text-2xl md:text-3xl leading-relaxed relative z-10 text-center">
+                    <p class="text-slate-100">Señor, enséñame el arte de escuchar.</p>
+                    <p class="text-slate-100">Armoniza toda mi persona para prestar atención.</p>
+                    <p class="text-slate-100">Empápame de silencio para acoger los gritos de cada persona.</p>
+                    <p class="text-slate-100">Regálame sosiego interior para contener su agitación y sus padecimientos.</p>
+                    <p class="text-slate-100">Dame el cuidado, la paciencia y el respeto necesarios para que los que vengan a mí, se sientan escuchados.</p>
+                    <p class="text-slate-100">Haz que aprenda a escuchar con todo mi ser:</p>
+                    <p class="text-slate-100">que escuche con todo mi cuerpo, con los ojos, con mi sonrisa, con las manos, con el alma…</p>
+                    <p class="text-slate-100">Que no enjuicie, aconseje, interprete, dirija a las personas,</p>
+                    <p class="text-slate-100">Sino que, simplemente, las escuche.</p>
+                    <p class="text-slate-100">Que mis reflejos y palabras no sean más que el fruto de otra escucha:</p>
+                    <p class="text-slate-100">la de tu voz que me habla en mi interior,</p>
+                    <p class="text-slate-100">la de tu amor, del que solamente soy un signo y un portador para quien escucho.</p>
+                    <p class="font-bold text-blue-300 mt-8">Amén.</p>
                 </div>
             </div>
         </div>
@@ -391,62 +365,6 @@
     <script>
         // Inicializa la librería de iconos Lucide
         lucide.createIcons();
-
-        // ---- LÓGICA DE LA ORACIÓN ----
-        let indiceOracion = -1;
-        let intervaloOracion;
-        
-        function comenzarOracion() {
-            // Ocultar la pantalla de inicio y mostrar el contenedor de las líneas
-            document.getElementById('oracion-inicio').classList.add('hidden');
-            const lectorDiv = document.getElementById('oracion-textos');
-            lectorDiv.classList.remove('hidden');
-            lectorDiv.classList.add('flex');
-            
-            const lineas = document.querySelectorAll('.linea-oracion');
-            indiceOracion = 0;
-            
-            // Mostrar la primera línea
-            mostrarSiguienteLinea(lineas, indiceOracion);
-
-            // Programar las demás
-            intervaloOracion = setInterval(() => {
-                indiceOracion++;
-                if (indiceOracion < lineas.length) {
-                    mostrarSiguienteLinea(lineas, indiceOracion);
-                } else {
-                    // Detener temporizador al final y mostrar botón
-                    clearInterval(intervaloOracion);
-                    document.getElementById('btn-reiniciar-oracion').classList.remove('hidden');
-                }
-            }, 2500); // Aparece cada 2.5 segundos
-        }
-
-        function mostrarSiguienteLinea(lineas, index) {
-            if (lineas[index]) {
-                lineas[index].classList.remove('opacity-0', 'translate-y-8', 'hidden');
-                lineas[index].classList.add('opacity-100', 'translate-y-0');
-            }
-        }
-
-        function reiniciarOracion() {
-            clearInterval(intervaloOracion);
-            indiceOracion = -1;
-
-            // Restablecer estilos de todas las líneas para ocultarlas
-            const lineas = document.querySelectorAll('.linea-oracion');
-            lineas.forEach(linea => {
-                linea.classList.remove('opacity-100', 'translate-y-0');
-                linea.classList.add('opacity-0', 'translate-y-8', 'hidden');
-            });
-
-            // Ocultar el lector y mostrar de nuevo el botón de inicio
-            document.getElementById('btn-reiniciar-oracion').classList.add('hidden');
-            const lectorDiv = document.getElementById('oracion-textos');
-            lectorDiv.classList.remove('flex');
-            lectorDiv.classList.add('hidden');
-            document.getElementById('oracion-inicio').classList.remove('hidden');
-        }
 
         // ---- LÓGICA DEL COMPROMISO ----
         function sellarCompromiso(event) {
