@@ -1,0 +1,401 @@
+import React, { useState, useEffect } from 'react';
+import { 
+  Ear, Heart, BookOpen, Sparkles, User, Users, 
+  MessageCircle, ShieldCheck, ArrowDownCircle, Info,
+  Star, Flame, Bookmark
+} from 'lucide-react';
+
+// --- DATOS BÍBLICOS EXTRAÍDOS DEL DOCUMENTO ---
+const citasAT = [
+  {
+    libro: "Génesis 1,3...",
+    tema: "Creación por la Palabra",
+    texto: "Dios al crear al ser humano a su imagen, lo ha hecho capaz de hablar y de escuchar. La creación es un mensaje hablado, pensado para el hombre.",
+    icon: <Sparkles className="w-8 h-8 text-yellow-500" />
+  },
+  {
+    libro: "Deuteronomio 6,4",
+    tema: "Escucha Israel",
+    texto: "Texto emblemático de la fe israelita, donde aparecen juntos la fe en el Dios único y el amor a él.",
+    icon: <Ear className="w-8 h-8 text-red-400" />
+  },
+  {
+    libro: "1 Samuel 3,9-10",
+    tema: "Apertura y disponibilidad",
+    texto: "Samuel, mediante un aprendizaje gradual, responde a la llamada de Dios con apertura: \"Habla, Señor, que tu siervo escucha\".",
+    icon: <User className="w-8 h-8 text-indigo-500" />
+  },
+  {
+    libro: "Isaías 50,4",
+    tema: "El papel del profeta",
+    texto: "El profeta escucha a Dios y el pueblo debe escuchar al profeta: \"Cada mañana despierta mi oído para escuchar\".",
+    icon: <MessageCircle className="w-8 h-8 text-green-500" />
+  },
+  {
+    libro: "Proverbios 1,5 y 18,13",
+    tema: "Literatura Sapiencial",
+    texto: "\"Escuche el sabio y aumentará su saber\". \"Responder antes de escuchar es necedad y vergüenza\".",
+    icon: <BookOpen className="w-8 h-8 text-amber-600" />
+  },
+  {
+    libro: "Salmo 95,7-8",
+    tema: "Evitar el endurecimiento",
+    texto: "La escucha evita la contumacia. Muchas heridas del alma nacen de la falta de escucha: personas no comprendidas, dolores no expresados.",
+    icon: <Heart className="w-8 h-8 text-rose-500" />
+  },
+  {
+    libro: "Eclesiástico 6 & Sal 34",
+    tema: "Escucha Compasiva",
+    texto: "Dios como modelo supremo de escucha compasiva: \"Los ojos del Señor están sobre los justos, y sus oídos atentos a su clamor\".",
+    icon: <Flame className="w-8 h-8 text-orange-500" />
+  }
+];
+
+const citasNT = [
+  {
+    libro: "Romanos 10,17",
+    tema: "El origen de la fe",
+    texto: "San Pablo formula el origen de la fe como respuesta a Dios: \"La fe viene de la escucha, y la escucha, de la palabra de Cristo\".",
+    icon: <Star className="w-8 h-8 text-blue-500" />
+  },
+  {
+    libro: "Marcos 4,9",
+    tema: "Buena Noticia",
+    texto: "Jesús como la Palabra definitiva del Padre: \"El que tenga oídos para oír, que oiga\". Invitación constante y enfática a escuchar.",
+    icon: <Ear className="w-8 h-8 text-teal-500" />
+  },
+  {
+    libro: "Lucas 10,39",
+    tema: "La mejor parte",
+    texto: "\"María, sentada a los pies del Señor, escuchaba su palabra\", lo que calificará Jesús como la única cosa necesaria.",
+    icon: <Users className="w-8 h-8 text-purple-500" />
+  },
+  {
+    libro: "Lucas 11,28",
+    tema: "Escucha activa",
+    texto: "\"Dichosos más bien los que escuchan la palabra de Dios y la guardan\": Jesús propone una escucha que constituye el verdadero parentesco.",
+    icon: <Bookmark className="w-8 h-8 text-fuchsia-500" />
+  },
+  {
+    libro: "Lucas 8,18",
+    tema: "Evitar la superficialidad",
+    texto: "\"Mirad, pues, cómo escucháis\": Invitación a escuchar bien a Dios, a los demás y a nosotros mismos.",
+    icon: <Heart className="w-8 h-8 text-red-500" />
+  }
+];
+
+const oracionLineas = [
+  "Señor, enséñame el arte de escuchar.",
+  "Armoniza toda mi persona para prestar atención.",
+  "Empápame de silencio para acoger los gritos de cada persona.",
+  "Regálame sosiego interior para contener su agitación y sus padecimientos.",
+  "Dame el cuidado, la paciencia y el respeto necesarios para que los que vengan a mí, se sientan escuchados.",
+  "Haz que aprenda a escuchar con todo mi ser:",
+  "que escuche con todo mi cuerpo, con los ojos, con mi sonrisa, con las manos, con el alma…",
+  "Que no enjuicie, aconseje, interprete, dirija a las personas,",
+  "Sino que, simplemente, las escuche.",
+  "Que mis reflejos y palabras no sean más que el fruto de otra escucha:",
+  "la de tu voz que me habla en mi interior,",
+  "la de tu amor, del que solamente soy un signo y un portador para quien escucho.",
+  "Amén."
+];
+
+export default function LaEscuchaApp() {
+  const [oracionPaso, setOracionPaso] = useState(-1);
+  const [compromiso, setCompromiso] = useState("");
+  const [isSello, setIsSello] = useState(false);
+
+  // Efecto para lectura guiada de la oración
+  useEffect(() => {
+    let timer;
+    if (oracionPaso >= 0 && oracionPaso < oracionLineas.length) {
+      timer = setTimeout(() => {
+        setOracionPaso(prev => prev + 1);
+      }, 2000); // Avanza cada 2 segundos
+    }
+    return () => clearTimeout(timer);
+  }, [oracionPaso]);
+
+  const iniciarOracion = () => setOracionPaso(0);
+  
+  const handleSellar = (e) => {
+    e.preventDefault();
+    if (compromiso.trim() !== "") {
+      setIsSello(true);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-50 font-sans text-slate-800 selection:bg-blue-200">
+      
+      {/* HERO SECTION */}
+      <header className="relative w-full h-[60vh] flex items-center justify-center overflow-hidden bg-slate-900">
+        <div className="absolute inset-0 z-0 opacity-40">
+          <img 
+            src="https://images.unsplash.com/photo-1499209974431-9dddcece7f88?auto=format&fit=crop&q=80&w=2000" 
+            alt="Interior espiritual" 
+            className="w-full h-full object-cover filter brightness-90"
+          />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-slate-900 z-10"></div>
+        
+        <div className="relative z-20 text-center px-4 max-w-4xl mx-auto flex flex-col items-center">
+          <p className="text-blue-300 font-semibold tracking-widest uppercase mb-4 text-sm md:text-base">
+            Vicaría San Juan María Vianney • 14 de mayo de 2026
+          </p>
+          <Ear className="w-16 h-16 text-white mb-6 animate-pulse" />
+          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 font-serif drop-shadow-lg">
+            El Arte de la Escucha
+          </h1>
+          <a href="#objetivo" className="mt-8 animate-bounce text-slate-300 hover:text-white transition-colors">
+            <ArrowDownCircle className="w-10 h-10" />
+          </a>
+        </div>
+      </header>
+
+      {/* OBJETIVO SECTION */}
+      <section id="objetivo" className="max-w-5xl mx-auto px-4 py-16 -mt-20 relative z-30">
+        <div className="bg-white rounded-3xl shadow-xl p-8 md:p-12 border border-slate-100 flex flex-col md:flex-row gap-8 items-center">
+          <div className="flex-shrink-0 bg-blue-50 p-6 rounded-full">
+            <Info className="w-12 h-12 text-blue-600" />
+          </div>
+          <div>
+            <h2 className="text-3xl font-bold text-slate-800 mb-4 font-serif">Objetivo Pastoral</h2>
+            <p className="text-lg text-slate-600 leading-relaxed">
+              Generar interés por el arte de la escucha activa, para favorecer las relaciones interpersonales en el ejercicio del ministerio sacerdotal, mediante la puesta en práctica de acciones significativas que profundicen esta realidad y se convierta en una herramienta de trabajo pastoral.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ORACIÓN SECTION (INTERACTIVA) */}
+      <section className="bg-slate-800 text-slate-100 py-20 px-4">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-10">
+            <h2 className="text-4xl font-bold mb-4 font-serif text-white">Oración por la Escucha</h2>
+            <p className="text-slate-400">Una plegaria para preparar el corazón antes de acoger a los demás.</p>
+          </div>
+
+          <div className="bg-slate-900/50 p-8 md:p-12 rounded-3xl border border-slate-700 shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 p-8 opacity-10">
+              <MessageCircle className="w-48 h-48" />
+            </div>
+            
+            {oracionPaso === -1 ? (
+              <div className="text-center py-12 relative z-10">
+                <button 
+                  onClick={iniciarOracion}
+                  className="bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all hover:scale-105 shadow-lg shadow-blue-900/20"
+                >
+                  Iniciar Lectura Reflexiva
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-4 font-serif text-xl md:text-2xl leading-relaxed relative z-10 min-h-[400px]">
+                {oracionLineas.map((linea, index) => (
+                  <p 
+                    key={index} 
+                    className={`transition-all duration-1000 ${
+                      index <= oracionPaso 
+                        ? 'opacity-100 translate-y-0 text-slate-200' 
+                        : 'opacity-0 translate-y-4 hidden'
+                    } ${index === oracionLineas.length - 1 ? 'font-bold text-blue-400 mt-8' : ''}`}
+                  >
+                    {linea}
+                  </p>
+                ))}
+                {oracionPaso >= oracionLineas.length && (
+                  <button 
+                    onClick={() => setOracionPaso(-1)}
+                    className="mt-12 text-sm text-slate-400 hover:text-white transition-colors border border-slate-600 px-4 py-2 rounded-full"
+                  >
+                    Reiniciar Oración
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* ILUMINACIÓN BÍBLICA SECTION */}
+      <section className="py-24 px-4 bg-slate-50">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <BookOpen className="w-12 h-12 text-blue-600 mx-auto mb-4" />
+            <h2 className="text-4xl font-bold text-slate-800 mb-6 font-serif">Iluminación Bíblica</h2>
+            <p className="text-lg text-slate-600 max-w-3xl mx-auto">
+              En un mundo invadido de ruido, de palabras que se acumulan y de pensamientos que no se detienen, una de las necesidades más profundas del ser humano será siempre <strong>ser escuchado y aprender a escuchar.</strong>
+            </p>
+          </div>
+
+          {/* Antiguo Testamento */}
+          <div className="mb-16">
+            <div className="border-b-2 border-slate-200 pb-4 mb-8">
+              <h3 className="text-2xl font-bold text-slate-700 font-serif">
+                Antiguo Testamento: El Origen de la Escucha
+              </h3>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {citasAT.map((cita, idx) => (
+                <div 
+                  key={`at-${idx}`} 
+                  className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group"
+                >
+                  <div className="mb-4 transform group-hover:scale-110 transition-transform duration-300">
+                    {cita.icon}
+                  </div>
+                  <h3 className="text-xl font-bold text-slate-800 mb-1">{cita.libro}</h3>
+                  <h4 className="text-sm font-semibold text-blue-600 uppercase tracking-wider mb-3">{cita.tema}</h4>
+                  <p className="text-slate-600 text-sm leading-relaxed">
+                    {cita.texto}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Nuevo Testamento */}
+          <div>
+            <div className="border-b-2 border-slate-200 pb-4 mb-6 flex flex-col md:flex-row md:items-center gap-3">
+              <Star className="w-8 h-8 text-yellow-500" />
+              <h3 className="text-2xl font-bold text-slate-700 font-serif">
+                Nuevo Testamento: Jesús, Palabra y Escucha
+              </h3>
+            </div>
+            <p className="text-slate-600 mb-8 italic text-lg border-l-4 border-yellow-500 pl-4">
+              "En el Nuevo Testamento aparece Jesús como la Palabra definitiva del Padre. El Evangelio significa precisamente buena noticia."
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {citasNT.map((cita, idx) => (
+                <div 
+                  key={`nt-${idx}`} 
+                  className="bg-blue-50/40 p-6 rounded-2xl shadow-sm border border-blue-100 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group"
+                >
+                  <div className="mb-4 transform group-hover:scale-110 transition-transform duration-300">
+                    {cita.icon}
+                  </div>
+                  <h3 className="text-xl font-bold text-slate-800 mb-1">{cita.libro}</h3>
+                  <h4 className="text-sm font-semibold text-blue-600 uppercase tracking-wider mb-3">{cita.tema}</h4>
+                  <p className="text-slate-600 text-sm leading-relaxed">
+                    {cita.texto}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CONCLUSIÓN SECTION */}
+      <section className="py-24 px-4 bg-white border-t border-slate-100">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-slate-800 mb-6 font-serif">Las Tres Dimensiones de la Escucha</h2>
+            <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+              Escuchar no es solo un acto de cortesía; es un acto profundamente humano y sanador. Basados en la invitación de Jesús, <em>"Mirad, pues, cómo escucháis"</em>, la escucha se convierte en un pilar pastoral en tres niveles:
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="bg-slate-50 rounded-3xl p-8 border-t-8 border-blue-500 shadow-sm hover:shadow-lg transition-all hover:-translate-y-2">
+              <Sparkles className="w-12 h-12 text-blue-600 mb-6" />
+              <h3 className="text-3xl font-bold text-slate-800 mb-4 font-serif">1. A Dios</h3>
+              <p className="text-slate-700 text-lg leading-relaxed">
+                Escuchar a Dios, que sigue hablando en lo profundo del corazón. Es la actitud de Samuel, la disposición constante a acoger la voluntad divina en medio del ministerio y del silencio personal.
+              </p>
+            </div>
+            
+            <div className="bg-slate-50 rounded-3xl p-8 border-t-8 border-rose-500 shadow-sm hover:shadow-lg transition-all hover:-translate-y-2">
+              <Users className="w-12 h-12 text-rose-600 mb-6" />
+              <h3 className="text-3xl font-bold text-slate-800 mb-4 font-serif">2. A los Demás</h3>
+              <p className="text-slate-700 text-lg leading-relaxed">
+                Especialmente a quienes cargan silencios y sufrimientos. Quien escucha acoge, quien escucha dignifica, quien escucha ayuda a reconstruir el corazón herido del otro, siendo reflejo del amor de Dios.
+              </p>
+            </div>
+
+            <div className="bg-slate-50 rounded-3xl p-8 border-t-8 border-indigo-500 shadow-sm hover:shadow-lg transition-all hover:-translate-y-2">
+              <User className="w-12 h-12 text-indigo-600 mb-6" />
+              <h3 className="text-3xl font-bold text-slate-800 mb-4 font-serif">3. A Nosotros Mismos</h3>
+              <p className="text-slate-700 text-lg leading-relaxed">
+                Reconociendo lo que sentimos y necesitamos. Escucharse evita el endurecimiento interior, previniendo heridas del alma al permitirnos procesar fatigas, incomprensiones y dolores.
+              </p>
+            </div>
+          </div>
+
+          {/* Reflexión Final */}
+          <div className="mt-24 p-10 md:p-16 bg-slate-900 text-white rounded-3xl text-center shadow-2xl relative overflow-hidden">
+            <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at center, #4f46e5 0%, transparent 70%)' }}></div>
+            <div className="relative z-10">
+              <p className="text-2xl md:text-4xl font-serif italic font-light leading-relaxed mb-8">
+                "Pidamos entonces la gracia de ser personas que saben escuchar. Porque donde hay escucha auténtica, hay comprensión..."
+              </p>
+              <p className="text-xl md:text-3xl font-serif italic text-blue-200">
+                "...donde hay comprensión, hay alivio; y donde hay alivio, <strong className="font-bold text-white">comienza la sanación.</strong>"
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* COMPROMISO SECTION */}
+      <section className="py-24 px-4 bg-gradient-to-br from-blue-50 to-indigo-50">
+        <div className="max-w-3xl mx-auto">
+          {!isSello ? (
+            <div className="bg-white p-8 md:p-12 rounded-3xl shadow-2xl border border-blue-100">
+              <div className="flex items-center gap-4 mb-8 border-b border-slate-100 pb-6">
+                <div className="bg-blue-600 p-3 rounded-full text-white">
+                  <ShieldCheck className="w-8 h-8" />
+                </div>
+                <h2 className="text-3xl font-bold text-slate-800 font-serif">Mi Compromiso Sacerdotal</h2>
+              </div>
+              
+              <form onSubmit={handleSellar}>
+                <label className="block text-lg font-medium text-slate-700 mb-4">
+                  ¿Desde la Escucha, cómo puedo aportar a la pastoral sacerdotal en mi presbiterio?
+                </label>
+                <textarea 
+                  className="w-full h-40 p-4 rounded-xl border border-slate-300 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all resize-none text-slate-700 text-lg"
+                  placeholder="Escribe tu reflexión y compromiso aquí..."
+                  value={compromiso}
+                  onChange={(e) => setCompromiso(e.target.value)}
+                  required
+                ></textarea>
+                
+                <button 
+                  type="submit"
+                  className="mt-6 w-full bg-slate-900 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-xl transition-colors text-lg flex items-center justify-center gap-2"
+                >
+                  <ShieldCheck className="w-6 h-6" />
+                  Sellar Compromiso
+                </button>
+              </form>
+            </div>
+          ) : (
+            <div className="bg-white p-10 md:p-16 rounded-3xl shadow-2xl border-4 border-blue-100 text-center animate-in fade-in zoom-in duration-500">
+              <ShieldCheck className="w-24 h-24 text-green-500 mx-auto mb-6" />
+              <h2 className="text-4xl font-bold text-slate-800 mb-4 font-serif">Compromiso Sellado</h2>
+              <p className="text-xl text-slate-600 italic mb-8">
+                "Habla, Señor, que tu siervo escucha."
+              </p>
+              <div className="bg-slate-50 p-6 rounded-xl border border-slate-200 text-left mb-8">
+                <p className="text-slate-700 font-medium whitespace-pre-wrap">{compromiso}</p>
+              </div>
+              <button 
+                onClick={() => setIsSello(false)}
+                className="text-blue-600 hover:text-blue-800 font-semibold underline underline-offset-4"
+              >
+                Escribir un nuevo compromiso
+              </button>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* FOOTER */}
+      <footer className="bg-slate-900 text-slate-400 py-8 text-center px-4">
+        <p>Vicaría San Juan María Vianney • Pastoral Sacerdotal • 2026</p>
+      </footer>
+    </div>
+  );
+}
